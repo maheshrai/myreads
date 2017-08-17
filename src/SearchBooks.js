@@ -15,17 +15,19 @@ class SearchBooks extends Component {
     }
 
     searchBooks = (query) => {
-        if (query.trim() === '') {
+        query = query.trim()
+        if (query === '') {
             let books = []
             this.setState({ books })
             return
         }
         const { myreads } = this.props
-        BooksAPI.search(query, 20).then((books) => {
-            books.map((book) => {
-                let x = myreads.find((r) => (r.id === book.id))
-                if (x) book.shelf = x.shelf
-                else book.shelf = 'none'
+        BooksAPI.search(query, 20).then((results) => {
+            // if the books in serach results exist in my reads, update it's shelf
+            let books = results.map((book) => {
+                let bookInMyReads = myreads.find((myr) => (myr.id === book.id))
+                if (bookInMyReads) book.shelf = bookInMyReads.shelf
+                return book
             })
             this.setState({ books })
         })
@@ -41,7 +43,7 @@ class SearchBooks extends Component {
                 <div className="search-books-bar">
                     <Link className="close-search" to="/">Close</Link>
                     <div className="search-books-input-wrapper">
-                        <input type="text" placeholder="Search by title or author" onChange={(event) => this.searchBooks(event.target.value)} />
+                        <input type="text" autoFocus placeholder="Search by title or author" onChange={(event) => this.searchBooks(event.target.value)} />
                     </div>
                 </div>
                 <div className="search-books-results">

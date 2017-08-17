@@ -21,13 +21,13 @@ class BooksApp extends React.Component {
     let newlist = books.filter((b) => b.id !== book.id)
     book.shelf = newShelf
     if (newShelf !== 'none') newlist.push(book)
-    this.setState((state) => ({ newlist }))
+    this.setState((state) => ({ books: newlist }))
     BooksAPI.update(book, newShelf)
   }
 
   render() {
 
-    const { books } = this.state;
+    const { books } = this.state
     let currentlyReadingList = books.filter((book) => book.shelf === "currentlyReading")
     let wantToReadList = books.filter((book) => book.shelf === "wantToRead")
     let readList = books.filter((book) => book.shelf === "read")
