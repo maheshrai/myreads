@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import * as BooksAPI from './BooksAPI'
+import BooksGrid from './BooksGrid'
 
 class SearchBooks extends Component {
     state = {
@@ -19,8 +20,13 @@ class SearchBooks extends Component {
             this.setState({ books })
             return
         }
-        const { myreads, onChangeShelf } = this.props
+        const { myreads } = this.props
         BooksAPI.search(query, 20).then((books) => {
+            books.map((book) => {
+                let x = myreads.find((r) => (r.id === book.id))
+                if (x) book.shelf = x.shelf
+                else book.shelf = 'none'
+            })
             this.setState({ books })
         })
     }
@@ -28,7 +34,7 @@ class SearchBooks extends Component {
     render() {
 
         const { books } = this.state
-        const { myreads, onChangeShelf } = this.props
+        const { onChangeShelf } = this.props
 
         return (
             <div className="search-books">
@@ -39,28 +45,9 @@ class SearchBooks extends Component {
                     </div>
                 </div>
                 <div className="search-books-results">
-                    <ol className="books-grid">
-                        {books.map((book) => (
-                            <li key={book.id}>
-                                <div className="book">
-                                    <div className="book-top">
-                                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url("' + book.imageLinks.thumbnail + '")' }}></div>
-                                        <div className="book-shelf-changer">
-                                            <select value={book.shelf ? book.shelf : 'none'} onChange={(e) => onChangeShelf(book, e.target.value)}>
-                                                <option value="none" disabled>Move to...</option>
-                                                <option value="currentlyReading">Currently Reading</option>
-                                                <option value="wantToRead">Want to Read</option>
-                                                <option value="read">Read</option>
-                                                <option value="none">None</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="book-title">{book.title}</div>
-                                    <div className="book-authors">{book.authors}</div>
-                                </div>
-                            </li>
-                        ))}
-                    </ol>
+                    <BooksGrid
+                        books={books}
+                        onChangeShelf={onChangeShelf} />
                 </div>
             </div>
         )

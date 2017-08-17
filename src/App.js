@@ -17,7 +17,7 @@ class BooksApp extends React.Component {
   }
 
   changeShelf = (book, newShelf) => {
-    const { books, searchResults } = this.state;
+    const { books } = this.state;
     let newlist = books.filter((b) => b.id !== book.id)
     book.shelf = newShelf
     if (newShelf !== 'none') newlist.push(book)
