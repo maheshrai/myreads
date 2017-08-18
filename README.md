@@ -2,6 +2,10 @@
 
 MyReads App allows you to select and categorize books you have read, are currently reading, or want to read. The App also allows you to search for books and add it your shelves
 
+### Prerequisites
+
+MyReads app is built using React. Node and NPM are required to install and run the MyReads app.
+
 ### Installation
 
 ```
